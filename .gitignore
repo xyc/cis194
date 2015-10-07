@@ -1,0 +1,11 @@
+# ghc compilations
+*.hi
+*.o
+
+*.pdf
+
+lecture-notes/
+
+meta.hs
+
+.DS_Store
