@@ -4,8 +4,12 @@
 
 *.pdf
 
+ghc.md
 lecture-notes/
 
 meta.hs
+meta.md
+
+ghc.md
 
 .DS_Store

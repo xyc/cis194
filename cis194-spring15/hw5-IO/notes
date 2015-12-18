@@ -1,0 +1,60 @@
+Exercise 7
+
+sortedTs
+[("Shaanan Cohney",13089),("Aisha Craft",0),("Alessandra Blackmon",0),("Andre Cummins",0),("Angelika Batson",0),("Angeline Keck",0),("Asha Walling",0),("Bettye Wooten",0),("Blondell See",0),("Brenna Woodall",0),("Carline Epstein",0),("Charise Bradford",0),("Charlyn Keefer",0),("Cherie Mccool",0),("Donald Sanford",0),("Dorsey Gore",0),("Dulce Arnett",0),("Ericka Beverly",0),("Faustina Wolford",0),("Genaro Goins",0),("Gregory Nava",0),("Ileana Broughton",0),("Jami Kuntz",0),("Jeanetta Hoyt",0),("Jerrie Breedlove",0),("Joanie Cramer",0),("Jule Booker",0),("Kassie Hazel",0),("Lennie Haight",0),("Louie Lovelace",0),("Lucie Yazzie",0),("Margurite Thorn",0),("Marlyn Pulido",0),("Maurice Comer",0),("Nannie Swisher",0),("Ozella Burkett",0),("Roscoe Stamps",0),("Santo Sutherland",0),("Santos Maples",0),("Shanta Shafer",0),("Sharice Bledsoe",0),("Shaunte Foy",0),("Teddy Cheng",0),("Teodoro Gold",0),("Torie Martino",0),("Virgen Herman",0),("Hayden Weatherford",-41),("Doreatha Folse",-58),("Elise Carnes",-63),("Jason Mccallister",-63),("Daria Hawk",-102),("Shanti Hanley",-107),("Matilda Albright",-124),("Robby Laughlin",-151),("Colette Pickering",-173),("Heike Champagne",-176),("Farah Bateman",-197),("Valarie Hoy",-198),("Felecia Mckeown",-204),("Ngan Bratcher",-205),("August Jewell",-206),("Lissette Epperson",-206),("Caprice Burnett",-218),("Candis Lemus",-220),("Khalilah Stout",-224),("Newton Burks",-228),("Mollie Halverson",-236),("Una Nobles",-238),("Felipa Sallee",-255),("Suellen Boatwright",-261),("Ellyn Furr",-287),("Leia Klinger",-291),("Elana Holden",-303),("Ignacia Baugh",-317),("Margeret Scully",-321),("Jennefer Eggleston",-339),("Altha Redden",-342),("JC Casas",-360),("Kia Burkholder",-362),("Domenica Gable",-377),("Jeraldine Williford",-384),("Edris Corbitt",-398),("Dona Link",-425),("Alyson Pinkston",-437),("Alvera Barrera",-462),("Dia Monson",-463),("Francie Duggan",-515),("Reta Salcedo",-603),("Johnson Humphrey",-620),("Nathanial Arce",-661),("Allen Delagarza",-668)]
+
+payerTs
+[("Shaanan Cohney",13089)]
+
+payeeTs
+[("Hayden Weatherford",-41),("Doreatha Folse",-58),("Elise Carnes",-63),("Jason Mccallister",-63),("Daria Hawk",-102),("Shanti Hanley",-107),("Matilda Albright",-124),("Robby Laughlin",-151),("Colette Pickering",-173),("Heike Champagne",-176),("Farah Bateman",-197),("Valarie Hoy",-198),("Felecia Mckeown",-204),("Ngan Bratcher",-205),("August Jewell",-206),("Lissette Epperson",-206),("Caprice Burnett",-218),("Candis Lemus",-220),("Khalilah Stout",-224),("Newton Burks",-228),("Mollie Halverson",-236),("Una Nobles",-238),("Felipa Sallee",-255),("Suellen Boatwright",-261),("Ellyn Furr",-287),("Leia Klinger",-291),("Elana Holden",-303),("Ignacia Baugh",-317),("Margeret Scully",-321),("Jennefer Eggleston",-339),("Altha Redden",-342),("JC Casas",-360),("Kia Burkholder",-362),("Domenica Gable",-377),("Jeraldine Williford",-384),("Edris Corbitt",-398),("Dona Link",-425),("Alyson Pinkston",-437),("Alvera Barrera",-462),("Dia Monson",-463),("Francie Duggan",-515),("Reta Salcedo",-603),("Johnson Humphrey",-620),("Nathanial Arce",-661),("Allen Delagarza",-668)]
+
+zip payerTs payeeTs
+[(("Shaanan Cohney",13089),("Hayden Weatherford",-41))]
+
+zip3 payerTs payeeTs tIds
+[(("Shaanan Cohney",13089),("Hayden Weatherford",-41),"")]
+
+-- a list of transactions
+transactions = map (\t1 t2-> Transaction { from: fst t1
+                                          , to: fst t2
+                                          , amount: min (snd t1) (snd t2)
+                                          , tid: tId
+                                         }) (zip payerTs payeeTs)
+
+## Test:
+
+(Just ts) <- getBadTs "victims.json" "transactions.json"
+let flow = getFlow ts
+-- let criminal = getCriminal flow
+let undo_ts = undoTs flow (repeat "")
+toJSON undo_ts
+
+## compile and run
+ghc HW05.hs -main-is HW05
+./HW05
+
+
+
+
+
+
+{-
+where createTransaction zippedT = Transaction (fst payer) (fst payee) (min (snd payer) (snd payee)) tId
+                                    where payer
+                                          payee = snd zippedT
+
+abs: absolute money
+
+let createTransaction zippedT = Transaction (fst payer) (fst payee) (min (snd payer) ((abs . snd) payee)) tId where (payer, payee, tId) = zippedT
+
+
+nextTIds = drop (length transactions) tIds
+(tId1: tId2: ... : nextTIds)
+-- pattern matching: doesn't know length
+
+Map.insertWith (+) (to t) (amount t) . Map.insertWith (+) (from t) (-(amount t))
+
+Map.insertWith (+) (to t) (amount t) . Map.insertWith (+) (from t) (negate (amount t))
+
+-}
